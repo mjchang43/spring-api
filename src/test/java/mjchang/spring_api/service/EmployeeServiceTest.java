@@ -76,14 +76,14 @@ public class EmployeeServiceTest {
 	        emma.setPhone("0912345678");
 	        emma.setDepartment(dep1);
 	        
-	        PageRequest page = new PageRequest(0, 2, new Sort(Sort.Direction.ASC, "id"));
-	        PageRequest page1 = new PageRequest(1, 2, new Sort(Sort.Direction.ASC, "id"));
+	        PageRequest page = PageRequest.of(0, 2, new Sort(Sort.Direction.ASC, "id"));
+	        PageRequest page1 = PageRequest.of(1, 2, new Sort(Sort.Direction.ASC, "id"));
 	        Page<Employee> dep1Employees = new PageImpl<Employee>(Arrays.asList(david, emma), page, 2L);
 	        Page<Employee> page1Employees = new PageImpl<Employee>(Arrays.asList(emma), page1, 3L);
 	        
 	        Mockito.when(employeeRepository.findAll(new EmployeeSpecification(depConditions), page)).thenReturn(dep1Employees);
-	        Mockito.when(employeeRepository.findOne(david.getId())).thenReturn(david);
-	        Mockito.when(employeeRepository.findOne(-99)).thenReturn(null);
+	        Mockito.when(employeeRepository.getOne(david.getId())).thenReturn(david);
+	        Mockito.when(employeeRepository.getOne(-99)).thenReturn(null);
 	        Mockito.when(employeeRepository.findAll(page1)).thenReturn(page1Employees);
 	        Mockito.when(employeeRepository.save(david)).thenReturn(david);
 	        
@@ -102,7 +102,7 @@ public class EmployeeServiceTest {
 		Employee query = new Employee();
 		query.setDepartment(dep1);
 		
-		PageRequest page = new PageRequest(0, 2, new Sort(Sort.Direction.ASC, "id"));
+		PageRequest page = PageRequest.of(0, 2, new Sort(Sort.Direction.ASC, "id"));
 		String req = objectMapper.writeValueAsString(query);
 		Iterable<Employee> found = service.findCustom(req, page);
 		
@@ -116,7 +116,7 @@ public class EmployeeServiceTest {
         Employee fromDb = service.findById(13);
         assertThat(fromDb.getName()).isEqualTo("David");
 
-        Mockito.verify(employeeRepository, VerificationModeFactory.times(1)).findOne(Mockito.anyInt());
+        Mockito.verify(employeeRepository, VerificationModeFactory.times(1)).getOne(Mockito.anyInt());
         Mockito.reset(employeeRepository);
     }
 
@@ -124,14 +124,14 @@ public class EmployeeServiceTest {
     public void whenInValidId_thenEmployeeShouldNotBeFound() throws Exception {
         Employee fromDb = service.findById(-99);
         assertThat(fromDb).isNull();
-        Mockito.verify(employeeRepository, VerificationModeFactory.times(1)).findOne(Mockito.anyInt());
+        Mockito.verify(employeeRepository, VerificationModeFactory.times(1)).getOne(Mockito.anyInt());
         Mockito.reset(employeeRepository);
     }
 
     @Test
     public void givenEmployees_whengetAll_thenReturnRecords() throws Exception {
     	        
-        PageRequest page = new PageRequest(1, 2, new Sort(Sort.Direction.ASC, "id"));
+        PageRequest page = PageRequest.of(1, 2, new Sort(Sort.Direction.ASC, "id"));
         Iterable<Employee> allEmployees = service.findAll(page);
         assertThat(allEmployees).hasSize(1).extracting(Employee::getName).contains("Emma");
 

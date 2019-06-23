@@ -21,6 +21,7 @@ import mjchang.spring_api.model.Employee;
 
 public class EmployeeSpecification implements Specification<Employee> {
 
+	private static final long serialVersionUID = -7577729673702519557L;
 	private Map<String, Object> conditions;
 	
 	public EmployeeSpecification(Map<String, Object> conditions) {

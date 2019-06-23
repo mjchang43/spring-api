@@ -50,7 +50,7 @@ public class EmployeeService {
     	
         try {
         	
-        	return employeeRepository.findOne(id);
+        	return employeeRepository.getOne(id);
         }catch(Exception e) {
         	
         	e.printStackTrace();
@@ -72,6 +72,6 @@ public class EmployeeService {
     
     public void delete(int id) {
     	
-    	employeeRepository.delete(id);
+    	employeeRepository.deleteById(id);
 	}
 }

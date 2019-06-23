@@ -36,7 +36,7 @@ public class DepartmentController {
     	
         page = page < 0 ? 0 : page;
         Sort sort = new Sort(Sort.Direction.ASC, "id");
-        return departmentService.findAll(new PageRequest(page, size, sort));
+        return departmentService.findAll(PageRequest.of(page, size, sort));
     }
 
     @PostMapping("/add")

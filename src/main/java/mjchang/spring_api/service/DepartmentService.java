@@ -29,7 +29,7 @@ public class DepartmentService {
     	
         try {
         	
-        	return departmentRepository.findOne(id);
+        	return departmentRepository.getOne(id);
         }catch(Exception e) {
         	
         	e.printStackTrace();
@@ -53,7 +53,7 @@ public class DepartmentService {
     	
     	try {
     		
-    		departmentRepository.delete(id);
+    		departmentRepository.deleteById(id);
     	}catch(Exception e) {
         	
         	e.printStackTrace();

@@ -46,13 +46,13 @@ public class DepartmentServiceTest {
 		Department dep2 = new Department(2, "maintain");
 		Department dep3 = new Department(3, "manager");
 		
-		PageRequest page = new PageRequest(0, 2, new Sort(Sort.Direction.ASC, "id"));
+		PageRequest page = PageRequest.of(0, 2, new Sort(Sort.Direction.ASC, "id"));
 		
 		Page<Department> depList = new PageImpl<Department>(Arrays.asList(dep1, dep2), page, 2L);
 		
         Mockito.when(repository.findAll(page)).thenReturn(depList);
-        Mockito.when(repository.findOne(dep1.getId())).thenReturn(dep1);
-        Mockito.when(repository.findOne(-99)).thenReturn(null);
+        Mockito.when(repository.getOne(dep1.getId())).thenReturn(dep1);
+        Mockito.when(repository.getOne(-99)).thenReturn(null);
         Mockito.when(repository.save(dep3)).thenReturn(dep3);
 	       
     }
@@ -60,7 +60,7 @@ public class DepartmentServiceTest {
 	@Test
     public void givenEmployees_whengetAll_thenReturnRecords() throws Exception {
         
-		PageRequest page = new PageRequest(0, 2, new Sort(Sort.Direction.ASC, "id"));
+		PageRequest page = PageRequest.of(0, 2, new Sort(Sort.Direction.ASC, "id"));
 		Iterable<Department> found = service.findAll(page);
 		
         assertThat(found).hasSize(2).extracting(Department::getName).contains("design", "maintain");
@@ -73,7 +73,7 @@ public class DepartmentServiceTest {
     	Department fromDb = service.findById(1);
         assertThat(fromDb.getName()).isEqualTo("design");
 
-        Mockito.verify(repository, VerificationModeFactory.times(1)).findOne(Mockito.anyInt());
+        Mockito.verify(repository, VerificationModeFactory.times(1)).getOne(Mockito.anyInt());
         Mockito.reset(repository);
     }
 
@@ -81,7 +81,7 @@ public class DepartmentServiceTest {
     public void whenInValidId_thenEmployeeShouldNotBeFound() throws Exception {
     	Department fromDb = service.findById(-99);
         assertThat(fromDb).isNull();
-        Mockito.verify(repository, VerificationModeFactory.times(1)).findOne(Mockito.anyInt());
+        Mockito.verify(repository, VerificationModeFactory.times(1)).getOne(Mockito.anyInt());
         Mockito.reset(repository);
     }
 

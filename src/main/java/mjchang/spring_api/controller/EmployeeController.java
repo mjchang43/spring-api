@@ -33,7 +33,7 @@ public class EmployeeController {
     	
         page = page < 0 ? 0 : page;
         Sort sort = new Sort(Sort.Direction.ASC, "id");
-        return employeeService.findAll(new PageRequest(page, size, sort));
+        return employeeService.findAll(PageRequest.of(page, size, sort));
     }
     
     @PostMapping("/list")
@@ -42,7 +42,7 @@ public class EmployeeController {
     	
         page = page < 0 ? 0 : page;
         Sort sort = new Sort(Sort.Direction.ASC, "id");
-        return employeeService.findCustom(req, new PageRequest(page, size, sort));
+        return employeeService.findCustom(req, PageRequest.of(page, size, sort));
     }
 
     @PostMapping("/add")
